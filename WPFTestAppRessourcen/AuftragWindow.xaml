@@ -1,0 +1,98 @@
+﻿<Window x:Class="WPFTestAppRessourcen.AuftragWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFTestAppRessourcen"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Title="AuftragWindow" Height="450" Width="800"
+        >
+
+    <Window.Resources>
+        <CollectionViewSource x:Key="Auftragskategorien" />
+        <ObjectDataProvider x:Key="auftragsstatus" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:Status"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" ></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"><Run Text="Bezeichnung"/></TextBlock>
+        <TextBox Grid.Column="1" TextWrapping="Wrap" Text="{Binding Bezeichnung}" Controls:TextBoxHelper.ClearTextButton="True"/>
+
+        <TextBlock Grid.Row="1"><Run Text="Stunden"/></TextBlock>
+
+
+
+        <Controls:NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding Stunden}" Minimum="0" Maximum="10000" Interval="4" StringFormat="N"></Controls:NumericUpDown>
+
+        <TextBlock Grid.Row="2"><Run Text="Zuweisungen"/></TextBlock>
+        <ListView Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Zuweisungen}" BorderThickness="1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Stunden" DisplayMemberBinding="{Binding Stunden}">
+
+
+                    </GridViewColumn>
+
+                    <GridViewColumn Header="Von" DisplayMemberBinding="{Binding Path=Von, StringFormat='dd.MM.yyy'}"></GridViewColumn>
+                    <GridViewColumn Header="Bis" DisplayMemberBinding="{Binding Path=Bis, StringFormat='dd.MM.yyy'}"></GridViewColumn>
+                    <GridViewColumn Header="Person" DisplayMemberBinding="{Binding Person}"></GridViewColumn>
+                </GridView>
+            </ListView.View>
+            <ListView.ContextMenu>
+                <ContextMenu BorderBrush="Black" BorderThickness="1">
+                    <MenuItem Header="Zuweisung erfassen">
+                        <MenuItem.Icon>
+                            <Image Source="Resources/EssentialIcons/add-1.png" Width="16" Height="16"></Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Zuweisung löschen">
+                        <MenuItem.Icon>
+                            <Image Source="Resources/EssentialIcons/error.png" Width="16" Height="16"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
+            
+        </ListView>
+
+        <TextBlock Grid.Row="3"><Run Text="Beginn"/></TextBlock>
+
+
+        <TextBlock Grid.Row="4"><Run Text="Kategorie"/></TextBlock>
+        <ComboBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding Source={StaticResource Auftragskategorien}}" DisplayMemberPath ="Bezeichnung" SelectedItem="{Binding Auftragskategorie}" VerticalContentAlignment="Stretch"></ComboBox>
+
+        <TextBlock Grid.Row="5"><Run Text="Status"/></TextBlock>
+        <ComboBox Grid.Row="5" Grid.Column="1"   ItemsSource="{Binding Source={StaticResource auftragsstatus}}"  SelectedItem="{Binding Status}" VerticalContentAlignment="Stretch"/>
+
+        <Button Name="btnAuftragSpeichern" Grid.Row="6"   Click="btnAuftragSpeichern_Click">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock>Speichern</TextBlock>
+                <Image Source="Resources/EssentialIcons/save.png" Width="32"  />
+            </StackPanel>
+        </Button>
+        <Button Name="btnAbbrechen" Grid.Row="6" Grid.Column="1" IsCancel="True" Content="Abbrechen"/>
+        <DatePicker Grid.Column="1" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Top" Width="634" Height="60" SelectedDate="{Binding Beginn}"/>
+
+
+    </Grid>
+</Window>

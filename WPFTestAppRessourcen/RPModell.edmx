@@ -1,0 +1,399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RPModell.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="RPModellStoreContainer">
+    <EntitySet Name="Personen" EntityType="RPModell.Store.Personen" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Aufträge" EntityType="RPModell.Store.Aufträge" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Zuweisungen" EntityType="RPModell.Store.Zuweisungen" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Auftragskategorien" EntityType="RPModell.Store.Auftragskategorien" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Zuweisungskategorien" EntityType="RPModell.Store.Zuweisungskategorien" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Teams" EntityType="RPModell.Store.Teams" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="PersonZuweisung" Association="RPModell.Store.PersonZuweisung">
+      <End Role="Person" EntitySet="Personen" />
+      <End Role="Zuweisung" EntitySet="Zuweisungen" />
+    </AssociationSet>
+    <AssociationSet Name="AuftragZuweisung" Association="RPModell.Store.AuftragZuweisung">
+      <End Role="Auftrag" EntitySet="Aufträge" />
+      <End Role="Zuweisung" EntitySet="Zuweisungen" />
+    </AssociationSet>
+    <AssociationSet Name="AuftragskategorieAuftrag" Association="RPModell.Store.AuftragskategorieAuftrag">
+      <End Role="Auftragskategorie" EntitySet="Auftragskategorien" />
+      <End Role="Auftrag" EntitySet="Aufträge" />
+    </AssociationSet>
+    <AssociationSet Name="ZuweisungskategorieZuweisung" Association="RPModell.Store.ZuweisungskategorieZuweisung">
+      <End Role="Zuweisungskategorie" EntitySet="Zuweisungskategorien" />
+      <End Role="Zuweisung" EntitySet="Zuweisungen" />
+    </AssociationSet>
+    <AssociationSet Name="TeamPerson" Association="RPModell.Store.TeamPerson">
+      <End Role="Team" EntitySet="Teams" />
+      <End Role="Person" EntitySet="Personen" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Personen">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Vorname" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Kürzel" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Team_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Aufträge">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Bezeichnung" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Stunden" Type="int" Nullable="false" />
+    <Property Name="Beginn" Type="datetime" Nullable="false" />
+    <Property Name="Status" Type="smallint" Nullable="false" />
+    <Property Name="Auftragskategorie_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Zuweisungen">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Stunden" Type="int" Nullable="false" />
+    <Property Name="Von" Type="datetime" Nullable="false" />
+    <Property Name="Bis" Type="datetime" Nullable="false" />
+    <Property Name="Person_Id" Type="int" Nullable="false" />
+    <Property Name="Auftrag_Id" Type="int" Nullable="false" />
+    <Property Name="Zuweisungskategorie_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Auftragskategorien">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Bezeichnung" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Kürzel" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Zuweisungskategorien">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Bezeichnung" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Kürzel" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Teams">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Bezeichnung" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Kürzel" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="PersonZuweisung">
+    <End Role="Person" Type="RPModell.Store.Personen" Multiplicity="1" />
+    <End Role="Zuweisung" Type="RPModell.Store.Zuweisungen" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Zuweisung">
+        <PropertyRef Name="Person_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AuftragZuweisung">
+    <End Role="Auftrag" Type="RPModell.Store.Aufträge" Multiplicity="1" />
+    <End Role="Zuweisung" Type="RPModell.Store.Zuweisungen" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Auftrag">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Zuweisung">
+        <PropertyRef Name="Auftrag_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AuftragskategorieAuftrag">
+    <End Role="Auftragskategorie" Type="RPModell.Store.Auftragskategorien" Multiplicity="1" />
+    <End Role="Auftrag" Type="RPModell.Store.Aufträge" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Auftragskategorie">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Auftrag">
+        <PropertyRef Name="Auftragskategorie_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ZuweisungskategorieZuweisung">
+    <End Role="Zuweisungskategorie" Type="RPModell.Store.Zuweisungskategorien" Multiplicity="1" />
+    <End Role="Zuweisung" Type="RPModell.Store.Zuweisungen" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Zuweisungskategorie">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Zuweisung">
+        <PropertyRef Name="Zuweisungskategorie_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TeamPerson">
+    <End Role="Team" Type="RPModell.Store.Teams" Multiplicity="1" />
+    <End Role="Person" Type="RPModell.Store.Personen" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Team">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Person">
+        <PropertyRef Name="Team_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="RPModell" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="RPModellContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Personen" EntityType="RPModell.Person" />
+          <EntitySet Name="Aufträge" EntityType="RPModell.Auftrag" />
+          <EntitySet Name="Zuweisungen" EntityType="RPModell.Zuweisung" />
+          <AssociationSet Name="PersonZuweisung" Association="RPModell.PersonZuweisung">
+            <End Role="Person" EntitySet="Personen" />
+            <End Role="Zuweisung" EntitySet="Zuweisungen" />
+          </AssociationSet>
+          <AssociationSet Name="AuftragZuweisung" Association="RPModell.AuftragZuweisung">
+            <End Role="Auftrag" EntitySet="Aufträge" />
+            <End Role="Zuweisung" EntitySet="Zuweisungen" />
+          </AssociationSet>
+          <EntitySet Name="Auftragskategorien" EntityType="RPModell.Auftragskategorie" />
+          <AssociationSet Name="AuftragskategorieAuftrag" Association="RPModell.AuftragskategorieAuftrag">
+            <End Role="Auftragskategorie" EntitySet="Auftragskategorien" />
+            <End Role="Auftrag" EntitySet="Aufträge" />
+          </AssociationSet>
+          <EntitySet Name="Zuweisungskategorien" EntityType="RPModell.Zuweisungskategorie" />
+          <AssociationSet Name="ZuweisungskategorieZuweisung" Association="RPModell.ZuweisungskategorieZuweisung">
+            <End Role="Zuweisungskategorie" EntitySet="Zuweisungskategorien" />
+            <End Role="Zuweisung" EntitySet="Zuweisungen" />
+          </AssociationSet>
+          <EntitySet Name="Teams" EntityType="RPModell.Team" />
+          <AssociationSet Name="TeamPerson" Association="RPModell.TeamPerson">
+            <End Role="Team" EntitySet="Teams" />
+            <End Role="Person" EntitySet="Personen" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Vorname" Type="String" Nullable="false" />
+          <NavigationProperty Name="Zuweisungen" Relationship="RPModell.PersonZuweisung" FromRole="Person" ToRole="Zuweisung" />
+          <Property Name="Kürzel" Type="String" Nullable="false" />
+          <NavigationProperty Name="Team" Relationship="RPModell.TeamPerson" FromRole="Person" ToRole="Team" />
+        </EntityType>
+        <EntityType Name="Auftrag">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Zuweisungen" Relationship="RPModell.AuftragZuweisung" FromRole="Auftrag" ToRole="Zuweisung" />
+          <NavigationProperty Name="Auftragskategorie" Relationship="RPModell.AuftragskategorieAuftrag" FromRole="Auftrag" ToRole="Auftragskategorie" />
+          <Property Name="Bezeichnung" Type="String" Nullable="false" />
+          <Property Name="Stunden" Type="Int32" Nullable="false" />
+          <Property Name="Beginn" Type="DateTime" Nullable="false" />
+          <Property Name="Status" Type="RPModell.Status" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Zuweisung">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Person" Relationship="RPModell.PersonZuweisung" FromRole="Zuweisung" ToRole="Person" />
+          <NavigationProperty Name="Auftrag" Relationship="RPModell.AuftragZuweisung" FromRole="Zuweisung" ToRole="Auftrag" />
+          <Property Name="Stunden" Type="Int32" Nullable="false" />
+          <Property Name="Von" Type="DateTime" Nullable="false" />
+          <Property Name="Bis" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Zuweisungskategorie" Relationship="RPModell.ZuweisungskategorieZuweisung" FromRole="Zuweisung" ToRole="Zuweisungskategorie" />
+        </EntityType>
+        <Association Name="PersonZuweisung">
+          <End Type="RPModell.Person" Role="Person" Multiplicity="1" />
+          <End Type="RPModell.Zuweisung" Role="Zuweisung" Multiplicity="*" />
+        </Association>
+        <Association Name="AuftragZuweisung">
+          <End Type="RPModell.Auftrag" Role="Auftrag" Multiplicity="1" />
+          <End Type="RPModell.Zuweisung" Role="Zuweisung" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Auftragskategorie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Bezeichnung" Type="String" Nullable="false" />
+          <Property Name="Kürzel" Type="String" Nullable="false" />
+          <NavigationProperty Name="Aufträge" Relationship="RPModell.AuftragskategorieAuftrag" FromRole="Auftragskategorie" ToRole="Auftrag" />
+        </EntityType>
+        <Association Name="AuftragskategorieAuftrag">
+          <End Type="RPModell.Auftragskategorie" Role="Auftragskategorie" Multiplicity="1" />
+          <End Type="RPModell.Auftrag" Role="Auftrag" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Zuweisungskategorie">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Zuweisungen" Relationship="RPModell.ZuweisungskategorieZuweisung" FromRole="Zuweisungskategorie" ToRole="Zuweisung" />
+          <Property Name="Bezeichnung" Type="String" Nullable="false" />
+          <Property Name="Kürzel" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="ZuweisungskategorieZuweisung">
+          <End Type="RPModell.Zuweisungskategorie" Role="Zuweisungskategorie" Multiplicity="1" />
+          <End Type="RPModell.Zuweisung" Role="Zuweisung" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Team">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Personen" Relationship="RPModell.TeamPerson" FromRole="Team" ToRole="Person" />
+          <Property Name="Bezeichnung" Type="String" Nullable="false" />
+          <Property Name="Kürzel" Type="String" Nullable="false" />
+        </EntityType>
+        <Association Name="TeamPerson">
+          <End Type="RPModell.Team" Role="Team" Multiplicity="1" />
+          <End Type="RPModell.Person" Role="Person" Multiplicity="*" />
+        </Association>
+        <EnumType Name="Status" UnderlyingType="Int16">
+          <Member Name="Vorerfasst" Value="1" />
+          <Member Name="Aktiv" Value="2" />
+          <Member Name="Erledigt" Value="3" />
+          <Member Name="Abgebrochen" Value="99" />
+        </EnumType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="RPModellStoreContainer" CdmEntityContainer="RPModellContainer">
+    <EntitySetMapping Name="Personen">
+      <EntityTypeMapping TypeName="IsTypeOf(RPModell.Person)">
+        <MappingFragment StoreEntitySet="Personen">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Vorname" ColumnName="Vorname" />
+          <ScalarProperty Name="Kürzel" ColumnName="Kürzel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Aufträge">
+      <EntityTypeMapping TypeName="IsTypeOf(RPModell.Auftrag)">
+        <MappingFragment StoreEntitySet="Aufträge">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Bezeichnung" ColumnName="Bezeichnung" />
+          <ScalarProperty Name="Stunden" ColumnName="Stunden" />
+          <ScalarProperty Name="Beginn" ColumnName="Beginn" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Zuweisungen">
+      <EntityTypeMapping TypeName="IsTypeOf(RPModell.Zuweisung)">
+        <MappingFragment StoreEntitySet="Zuweisungen">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Stunden" ColumnName="Stunden" />
+          <ScalarProperty Name="Von" ColumnName="Von" />
+          <ScalarProperty Name="Bis" ColumnName="Bis" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Auftragskategorien">
+      <EntityTypeMapping TypeName="IsTypeOf(RPModell.Auftragskategorie)">
+        <MappingFragment StoreEntitySet="Auftragskategorien">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Bezeichnung" ColumnName="Bezeichnung" />
+          <ScalarProperty Name="Kürzel" ColumnName="Kürzel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Zuweisungskategorien">
+      <EntityTypeMapping TypeName="IsTypeOf(RPModell.Zuweisungskategorie)">
+        <MappingFragment StoreEntitySet="Zuweisungskategorien">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Bezeichnung" ColumnName="Bezeichnung" />
+          <ScalarProperty Name="Kürzel" ColumnName="Kürzel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Teams">
+      <EntityTypeMapping TypeName="IsTypeOf(RPModell.Team)">
+        <MappingFragment StoreEntitySet="Teams">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Bezeichnung" ColumnName="Bezeichnung" />
+          <ScalarProperty Name="Kürzel" ColumnName="Kürzel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="PersonZuweisung" TypeName="RPModell.PersonZuweisung" StoreEntitySet="Zuweisungen">
+      <EndProperty Name="Person">
+        <ScalarProperty Name="Id" ColumnName="Person_Id" />
+      </EndProperty>
+      <EndProperty Name="Zuweisung">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="AuftragZuweisung" TypeName="RPModell.AuftragZuweisung" StoreEntitySet="Zuweisungen">
+      <EndProperty Name="Auftrag">
+        <ScalarProperty Name="Id" ColumnName="Auftrag_Id" />
+      </EndProperty>
+      <EndProperty Name="Zuweisung">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="AuftragskategorieAuftrag" TypeName="RPModell.AuftragskategorieAuftrag" StoreEntitySet="Aufträge">
+      <EndProperty Name="Auftragskategorie">
+        <ScalarProperty Name="Id" ColumnName="Auftragskategorie_Id" />
+      </EndProperty>
+      <EndProperty Name="Auftrag">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ZuweisungskategorieZuweisung" TypeName="RPModell.ZuweisungskategorieZuweisung" StoreEntitySet="Zuweisungen">
+      <EndProperty Name="Zuweisungskategorie">
+        <ScalarProperty Name="Id" ColumnName="Zuweisungskategorie_Id" />
+      </EndProperty>
+      <EndProperty Name="Zuweisung">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="TeamPerson" TypeName="RPModell.TeamPerson" StoreEntitySet="Personen">
+      <EndProperty Name="Team">
+        <ScalarProperty Name="Id" ColumnName="Team_Id" />
+      </EndProperty>
+      <EndProperty Name="Person">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Kein" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
